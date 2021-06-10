@@ -1,5 +1,5 @@
 package utils
 
 type Hasher interface {
-	Hash(payload *string) error
+	Hash(payload string) (string, error)
 }

@@ -22,10 +22,11 @@ func (c *CreateUser) Create(ctx context.Context, data entities.User) (*entities.
 	}
 	data.Id = uuid
 
-	err = c.hasher.Hash(&data.Password)
+	hash, err := c.hasher.Hash(data.Password)
 	if err != nil {
 		return nil, utils.InternalProcessingErr(err.Error())
 	}
+	data.Password = hash
 
 	err = c.validator.Validate(&data)
 	if err != nil {
