@@ -18,18 +18,18 @@ type CreateUser struct {
 func (c *CreateUser) Create(ctx context.Context, data entities.User) (*entities.User, error) {
 	uuid, err := c.uuid.Generate()
 	if err != nil {
-		return nil, user.InternalProcessingErr(err.Error())
+		return nil, utils.InternalProcessingErr(err.Error())
 	}
 	data.Id = uuid
 
 	err = c.hasher.Hash(&data.Password)
 	if err != nil {
-		return nil, user.InternalProcessingErr(err.Error())
+		return nil, utils.InternalProcessingErr(err.Error())
 	}
 
 	err = c.validator.Validate(&data)
 	if err != nil {
-		return nil, user.InternalProcessingErr(err.Error())
+		return nil, utils.InternalProcessingErr(err.Error())
 	}
 
 	data.CreatedAt = time.Now().Local()
@@ -37,14 +37,14 @@ func (c *CreateUser) Create(ctx context.Context, data entities.User) (*entities.
 
 	existing, err := c.repository.Exists(ctx, data.Email)
 	if err != nil {
-		return nil, user.InternalProcessingErr(err.Error())
+		return nil, utils.InternalProcessingErr(err.Error())
 	} else if existing {
 		return nil, user.ExistingEmailErr(data.Email)
 	}
 
 	err = c.repository.Create(ctx, &data)
 	if err != nil {
-		return nil, user.InternalProcessingErr(err.Error())
+		return nil, utils.InternalProcessingErr(err.Error())
 	}
 
 	return &data, nil
