@@ -2,20 +2,28 @@ package main
 
 import (
 	"context"
-	"helpy/infra"
-	postgres "helpy/infra/repositories/pg"
+	"helpy/infra/db"
+	"helpy/infra/db/repositories"
+	"helpy/infra/utils"
 	valid "helpy/infra/validation"
 	"helpy/pkg/entities"
 	usecase "helpy/pkg/user/usecases"
+	"log"
 	"time"
 )
 
 func main() {
+	database, err := db.ConnectPg()
+	if err != nil {
+		log.Fatalln(err)
+	}
 	userUsecase := usecase.CreateUser{
-		Uuid:       infra.UUIDGenerator{},
-		Hasher:     infra.Argon2Hasher{},
-		Repository: postgres.PgUserRepository{},
-		Validator:  valid.UserGoValidator{},
+		Uuid:   utils.UUIDGenerator{},
+		Hasher: utils.Argon2Hasher{},
+		Repository: repositories.PgUserRepository{
+			Db: database,
+		},
+		Validator: valid.UserGoValidator{},
 	}
 
 	user := entities.User{
