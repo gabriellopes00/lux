@@ -1,7 +1,7 @@
 package user
 
-import "fmt"
+import "errors"
 
-func ExistingEmailErr(email string) error {
-	return fmt.Errorf("email %s already in use", email)
-}
+var (
+	ErrExistingEmail = errors.New("email already in use")
+)

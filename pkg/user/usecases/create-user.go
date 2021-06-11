@@ -9,43 +9,43 @@ import (
 )
 
 type CreateUser struct {
-	uuid       utils.UUIDGenerator
-	hasher     utils.Hasher
-	validator  user.Validator
-	repository user.Repository
+	Uuid       utils.UUIDGenerator
+	Hasher     utils.Hasher
+	Validator  user.Validator
+	Repository user.Repository
 }
 
 func (c *CreateUser) Create(ctx context.Context, data entities.User) (*entities.User, error) {
-	uuid, err := c.uuid.Generate()
+	uuid, err := c.Uuid.Generate()
 	if err != nil {
-		return nil, utils.InternalProcessingErr(err.Error())
+		return nil, err
 	}
 	data.Id = uuid
 
-	hash, err := c.hasher.Hash(data.Password)
+	hash, err := c.Hasher.Hash(data.Password)
 	if err != nil {
-		return nil, utils.InternalProcessingErr(err.Error())
+		return nil, err
 	}
 	data.Password = hash
 
-	err = c.validator.Validate(&data)
+	err = c.Validator.Validate(&data)
 	if err != nil {
-		return nil, utils.InternalProcessingErr(err.Error())
+		return nil, err
 	}
 
 	data.CreatedAt = time.Now().Local()
 	data.UpdatedAt = time.Now().Local()
 
-	existing, err := c.repository.Exists(ctx, data.Email)
+	existing, err := c.Repository.Exists(ctx, data.Email)
 	if err != nil {
-		return nil, utils.InternalProcessingErr(err.Error())
+		return nil, err
 	} else if existing {
-		return nil, user.ExistingEmailErr(data.Email)
+		return nil, user.ErrExistingEmail
 	}
 
-	err = c.repository.Create(ctx, &data)
+	err = c.Repository.Create(ctx, &data)
 	if err != nil {
-		return nil, utils.InternalProcessingErr(err.Error())
+		return nil, err
 	}
 
 	return &data, nil
