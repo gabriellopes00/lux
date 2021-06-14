@@ -16,5 +16,5 @@ func (f FindAvailableUser) FindAvaliable(ctx context.Context) (*[]entities.User,
 		return nil, err
 	}
 
-	return users, err
+	return users, nil
 }

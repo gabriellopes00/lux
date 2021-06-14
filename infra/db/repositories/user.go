@@ -44,3 +44,12 @@ func (repository PgUserRepository) FindAvailable(ctx context.Context) (*[]entiti
 
 	return users, nil
 }
+
+func (repository PgUserRepository) Delete(ctx context.Context, id string) error {
+	result := repository.Db.Delete(&entities.User{Id: id})
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"helpy/infra/db"
 	"helpy/infra/db/repositories"
 	"helpy/infra/utils"
@@ -28,29 +27,38 @@ func main() {
 	}
 
 	user := entities.User{
-		Name:        "Cleisom2",
-		Email:       "clsiom@mail.com",
+		Name:        "Gabriel Lopes",
+		Email:       "gabriellopes@mail.com",
 		Password:    "helpyapp00",
-		IsAvailable: false,
-		AvatarUrl:   "https://asdffff.png",
+		IsAvailable: true,
+		AvatarUrl:   "https://avatar.png",
 		Gender:      "M",
 		BirthDate:   time.Date(2005, 4, 13, 0, 0, 0, 0, time.Local),
 	}
-	_, err = userUsecase.Create(context.Background(), user)
+	created, err := userUsecase.Create(context.Background(), user)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	findAvailableUsecase := usecase.FindAvailableUser{
+	// findAvailableUsecase := usecase.FindAvailableUser{
+	// 	Repository: repositories.PgUserRepository{Db: database},
+	// }
+	// users, err := findAvailableUsecase.FindAvaliable(context.Background())
+	// if err != nil {
+	// 	log.Fatalln(err)
+	// }
+
+	// for _, v := range *users {
+	// 	fmt.Println(v)
+	// }
+
+	asdf := usecase.DeleteUser{
 		Repository: repositories.PgUserRepository{Db: database},
 	}
-	users, err := findAvailableUsecase.FindAvaliable(context.Background())
+
+	err = asdf.Delete(context.Background(), created.Id)
 	if err != nil {
 		log.Fatalln(err)
-	}
-
-	for _, v := range *users {
-		fmt.Println(v)
 	}
 
 }
