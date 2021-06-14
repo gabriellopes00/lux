@@ -5,7 +5,6 @@ import (
 	"helpy/pkg/entities"
 	"helpy/pkg/user"
 	"helpy/pkg/utils"
-	"log"
 	"time"
 )
 
@@ -46,7 +45,6 @@ func (c *CreateUser) Create(ctx context.Context, data entities.User) (*entities.
 
 	err = c.Repository.Create(ctx, &data)
 	if err != nil {
-		log.Fatalln(err)
 		return nil, err
 	}
 

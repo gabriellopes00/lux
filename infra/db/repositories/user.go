@@ -17,6 +17,7 @@ func (repository PgUserRepository) Create(ctx context.Context, user *entities.Us
 	if result.Error != nil {
 		return result.Error
 	}
+
 	return nil
 }
 
@@ -29,7 +30,17 @@ func (repository PgUserRepository) Exists(ctx context.Context, email string) (bo
 
 	if user.Email == email {
 		return true, nil
-	} else {
-		return false, nil
 	}
+
+	return false, nil
+}
+
+func (repository PgUserRepository) FindAvailable(ctx context.Context) (*[]entities.User, error) {
+	users := &[]entities.User{}
+	result := repository.Db.Find(users, "is_available = ?", true)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return users, nil
 }

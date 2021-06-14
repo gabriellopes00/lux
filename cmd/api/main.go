@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"helpy/infra/db"
 	"helpy/infra/db/repositories"
 	"helpy/infra/utils"
@@ -27,13 +28,29 @@ func main() {
 	}
 
 	user := entities.User{
-		Name:        "Gabriel Lopes",
-		Email:       "gabriel@mail.com",
+		Name:        "Cleisom2",
+		Email:       "clsiom@mail.com",
 		Password:    "helpyapp00",
-		IsAvailable: true,
-		AvatarUrl:   "https://avatar.png",
+		IsAvailable: false,
+		AvatarUrl:   "https://asdffff.png",
 		Gender:      "M",
 		BirthDate:   time.Date(2005, 4, 13, 0, 0, 0, 0, time.Local),
 	}
-	userUsecase.Create(context.Background(), user)
+	_, err = userUsecase.Create(context.Background(), user)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	findAvailableUsecase := usecase.FindAvailableUser{
+		Repository: repositories.PgUserRepository{Db: database},
+	}
+	users, err := findAvailableUsecase.FindAvaliable(context.Background())
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for _, v := range *users {
+		fmt.Println(v)
+	}
+
 }
