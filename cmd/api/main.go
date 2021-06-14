@@ -13,17 +13,17 @@ import (
 )
 
 func main() {
-	database, err := db.ConnectPg()
+	orm := db.GormPG{}
+	database, err := orm.Connect()
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	userUsecase := usecase.CreateUser{
-		Uuid:   utils.UUIDGenerator{},
-		Hasher: utils.Argon2Hasher{},
-		Repository: repositories.PgUserRepository{
-			Db: database,
-		},
-		Validator: valid.UserGoValidator{},
+		Uuid:       utils.UUIDGenerator{},
+		Hasher:     utils.Argon2Hasher{},
+		Repository: repositories.PgUserRepository{Db: database},
+		Validator:  valid.UserGoValidator{},
 	}
 
 	user := entities.User{
@@ -33,8 +33,7 @@ func main() {
 		IsAvailable: true,
 		AvatarUrl:   "https://avatar.png",
 		Gender:      "M",
-		BirthDate:   time.Date(2004, 4, 13, 12, 30, 0, 0, time.Local),
+		BirthDate:   time.Date(2005, 4, 13, 0, 0, 0, 0, time.Local),
 	}
-	ctx := context.Background()
-	userUsecase.Create(ctx, user)
+	userUsecase.Create(context.Background(), user)
 }

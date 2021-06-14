@@ -2,57 +2,34 @@ package repositories
 
 import (
 	"context"
-	"database/sql"
 	"helpy/pkg/entities"
-	"log"
 
 	_ "github.com/lib/pq"
+	"gorm.io/gorm"
 )
 
 type PgUserRepository struct {
-	Db *sql.DB
+	Db *gorm.DB
 }
 
-func (r PgUserRepository) Create(ctx context.Context, user *entities.User) error {
-	stm, err := r.Db.Prepare("INSERT INTO \"user\" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-	if err != nil {
-		log.Fatalln(err)
-		return err
+func (repository PgUserRepository) Create(ctx context.Context, user *entities.User) error {
+	result := repository.Db.Create(user)
+	if result.Error != nil {
+		return result.Error
 	}
-
-	defer stm.Close()
-
-	_, err = stm.Exec(
-		user.Id,
-		user.Name,
-		user.Email,
-		user.Password,
-		user.IsAvailable,
-		user.AvatarUrl,
-		user.Gender,
-		user.BirthDate,
-		user.CreatedAt,
-		user.UpdatedAt,
-		user.DeletedAt,
-	)
-
-	if err != nil {
-		return err
-	}
-
 	return nil
-	// fmt.Printf("name: %s\n", user.Name)
-	// fmt.Printf("birthDate: %s\n", user.BirthDate)
-	// fmt.Printf("id: %s\n", user.Id)
-	// fmt.Printf("email: %s\n", user.Email)
-	// fmt.Printf("avatarUrl: %s\n", user.AvatarUrl)
-	// fmt.Printf("createdAt: %s\n", user.CreatedAt)
-	// fmt.Printf("updatedAt: %s\n", user.UpdatedAt)
-	// fmt.Printf("hashPass: %s\n", user.Password)
-	// fmt.Printf("gender: %s\n", user.Gender)
-	// fmt.Printf("deletedAT: %s\n", user.DeletedAt)
 }
 
-func (r PgUserRepository) Exists(ctx context.Context, email string) (bool, error) {
-	return false, nil
+func (repository PgUserRepository) Exists(ctx context.Context, email string) (bool, error) {
+	user := &entities.User{}
+	result := repository.Db.Find(user, "email = ?", email)
+	if result.Error != nil {
+		return false, result.Error
+	}
+
+	if user.Email == email {
+		return true, nil
+	} else {
+		return false, nil
+	}
 }

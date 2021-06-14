@@ -1,17 +1,34 @@
 package db
 
 import (
-	"database/sql"
+	"helpy/pkg/entities"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func ConnectPg() (*sql.DB, error) {
-	db, err := sql.Open("postgres", "host=localhost port=5432 user=postgres password=psql dbname=helpy sslmode=disable")
+type GormPG struct{}
+
+func (orm *GormPG) Connect() (*gorm.DB, error) {
+	dsn := "host=localhost user=postgres password=psql dbname=helpy port=5432 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
-	} else if err = db.Ping(); err != nil {
-		defer db.Close()
 		return nil, err
 	}
 
+	err = orm.AutoMigrate(db)
+	if err != nil {
+		return db, err
+	}
+
 	return db, nil
+}
+
+func (orm *GormPG) AutoMigrate(db *gorm.DB) error {
+	err := db.AutoMigrate(&entities.User{})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
