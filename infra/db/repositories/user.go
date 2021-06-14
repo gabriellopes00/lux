@@ -45,8 +45,34 @@ func (repository PgUserRepository) FindAvailable(ctx context.Context) (*[]entiti
 	return users, nil
 }
 
+func (repository PgUserRepository) FindByEmail(ctx context.Context, email string) (*entities.User, error) {
+	users := &entities.User{}
+	result := repository.Db.Find(users, "email = ?", email)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return users, nil
+}
+
 func (repository PgUserRepository) Delete(ctx context.Context, id string) error {
 	result := repository.Db.Delete(&entities.User{Id: id})
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
+func (repository PgUserRepository) Update(ctx context.Context, email string, data *entities.User) error {
+	user := &entities.User{}
+	result := repository.Db.First(user, "email = ?", email)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	*user = *data
+	result = repository.Db.Save(user)
 	if result.Error != nil {
 		return result.Error
 	}

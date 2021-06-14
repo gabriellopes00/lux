@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"helpy/infra/db"
 	"helpy/infra/db/repositories"
 	"helpy/infra/utils"
@@ -39,6 +40,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	fmt.Println(created)
 
 	// findAvailableUsecase := usecase.FindAvailableUser{
 	// 	Repository: repositories.PgUserRepository{Db: database},
@@ -52,13 +54,22 @@ func main() {
 	// 	fmt.Println(v)
 	// }
 
-	asdf := usecase.DeleteUser{
-		Repository: repositories.PgUserRepository{Db: database},
-	}
+	// asdf := usecase.DeleteUser{
+	// 	Repository: repositories.PgUserRepository{Db: database},
+	// }
 
-	err = asdf.Delete(context.Background(), created.Id)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	// err = asdf.Delete(context.Background(), created.Id)
+	// if err != nil {
+	// 	log.Fatalln(err)
+	// }
+
+	// asdf := usecase.UpdateUser{
+	// 	Repository: repositories.PgUserRepository{Db: database},
+	// 	Validator:  valid.UserGoValidator{},
+	// }
+
+	// created.Name = "Cleisom Junior Arlindo"
+
+	// asdf.Update(context.Background(), *created)
 
 }
