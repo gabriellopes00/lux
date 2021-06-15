@@ -13,9 +13,9 @@ type PgUserRepository struct {
 }
 
 func (repository PgUserRepository) Create(ctx context.Context, user *entities.User) error {
-	result := repository.Db.Create(user)
-	if result.Error != nil {
-		return result.Error
+
+	if err := repository.Db.Create(user).Error; err != nil {
+		return err
 	}
 
 	return nil
@@ -56,25 +56,16 @@ func (repository PgUserRepository) FindByEmail(ctx context.Context, email string
 }
 
 func (repository PgUserRepository) Delete(ctx context.Context, id string) error {
-	result := repository.Db.Delete(&entities.User{Id: id})
-	if result.Error != nil {
-		return result.Error
+	if err := repository.Db.Delete(&entities.User{Id: id}).Error; err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func (repository PgUserRepository) Update(ctx context.Context, email string, data *entities.User) error {
-	user := &entities.User{}
-	result := repository.Db.First(user, "email = ?", email)
-	if result.Error != nil {
-		return result.Error
-	}
-
-	*user = *data
-	result = repository.Db.Save(user)
-	if result.Error != nil {
-		return result.Error
+func (repository PgUserRepository) Update(ctx context.Context, data *entities.User) error {
+	if err := repository.Db.Save(data).Error; err != nil {
+		return err
 	}
 
 	return nil

@@ -35,7 +35,7 @@ func main() {
 
 	user := entities.User{
 		Name:        "Gabriel Lopes",
-		Email:       "gabriellopes@mail.com",
+		Email:       "gabriellopess@mail.com",
 		Password:    "helpyapp00",
 		IsAvailable: true,
 		AvatarUrl:   "https://avatar.png",
@@ -69,13 +69,16 @@ func main() {
 	// 	log.Fatalln(err)
 	// }
 
-	// asdf := usecase.UpdateUser{
-	// 	Repository: repositories.PgUserRepository{Db: database},
-	// 	Validator:  valid.UserGoValidator{},
-	// }
+	time.Sleep(time.Second * 30)
 
-	// created.Name = "Cleisom Junior Arlindo"
+	asdf := usecase.UpdateUser{
+		Repository: repositories.PgUserRepository{Db: database},
+		Validator:  valid.UserGoValidator{},
+	}
 
-	// asdf.Update(context.Background(), *created)
+	created.Name = "asdf"
+	created.AvatarUrl = "http://asdf.jpg"
+
+	asdf.Update(context.Background(), *created)
 
 }

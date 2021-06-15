@@ -20,15 +20,13 @@ func (c *UpdateUser) Update(ctx context.Context, data entities.User) (*entities.
 		return nil, user.ErrNonExistentEmail
 	}
 
-	err = c.Validator.Validate(&data)
-	if err != nil {
+	if err = c.Validator.Validate(&data); err != nil {
 		return nil, err
 	}
 
 	data.UpdatedAt = time.Now().Local()
 
-	err = c.Repository.Update(ctx, data.Email, &data)
-	if err != nil {
+	if err = c.Repository.Update(ctx, &data); err != nil {
 		return nil, err
 	}
 
