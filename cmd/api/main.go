@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"helpy/config"
 	"helpy/infra/db"
 	"helpy/infra/db/repositories"
 	"helpy/infra/utils"
@@ -14,6 +15,11 @@ import (
 )
 
 func main() {
+	err := config.LoadEnv()
+	if err != nil {
+		log.Fatalf("error while loading environment variables: \n %s", err.Error())
+	}
+
 	orm := db.GormPG{}
 	database, err := orm.Connect()
 	if err != nil {
