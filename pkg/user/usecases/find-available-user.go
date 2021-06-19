@@ -10,8 +10,8 @@ type FindAvailableUser struct {
 	Repository user.Repository
 }
 
-func (f FindAvailableUser) FindAvaliable(ctx context.Context) (*[]entities.User, error) {
-	users, err := f.Repository.FindAvailable(ctx)
+func (usecase FindAvailableUser) FindAvaliable(ctx context.Context) (*[]entities.User, error) {
+	users, err := usecase.Repository.FindAvailable(ctx)
 	if err != nil {
 		return nil, err
 	}

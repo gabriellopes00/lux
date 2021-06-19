@@ -13,8 +13,8 @@ type PgUserRepository struct {
 }
 
 func (repository PgUserRepository) Create(ctx context.Context, user *entities.User) error {
-
-	if err := repository.Db.Create(user).Error; err != nil {
+	err := repository.Db.Create(user).Error
+	if err != nil {
 		return err
 	}
 
@@ -23,6 +23,7 @@ func (repository PgUserRepository) Create(ctx context.Context, user *entities.Us
 
 func (repository PgUserRepository) Exists(ctx context.Context, email string) (bool, error) {
 	user := &entities.User{}
+
 	result := repository.Db.Find(user, "email = ?", email)
 	if result.Error != nil {
 		return false, result.Error
@@ -37,6 +38,7 @@ func (repository PgUserRepository) Exists(ctx context.Context, email string) (bo
 
 func (repository PgUserRepository) FindAvailable(ctx context.Context) (*[]entities.User, error) {
 	users := &[]entities.User{}
+
 	result := repository.Db.Find(users, "is_available = ?", true)
 	if result.Error != nil {
 		return nil, result.Error
@@ -47,6 +49,7 @@ func (repository PgUserRepository) FindAvailable(ctx context.Context) (*[]entiti
 
 func (repository PgUserRepository) FindByEmail(ctx context.Context, email string) (*entities.User, error) {
 	users := &entities.User{}
+
 	result := repository.Db.Find(users, "email = ?", email)
 	if result.Error != nil {
 		return nil, result.Error
@@ -56,7 +59,8 @@ func (repository PgUserRepository) FindByEmail(ctx context.Context, email string
 }
 
 func (repository PgUserRepository) Delete(ctx context.Context, id string) error {
-	if err := repository.Db.Delete(&entities.User{Id: id}).Error; err != nil {
+	err := repository.Db.Delete(&entities.User{Id: id}).Error
+	if err != nil {
 		return err
 	}
 
@@ -64,7 +68,8 @@ func (repository PgUserRepository) Delete(ctx context.Context, id string) error 
 }
 
 func (repository PgUserRepository) Update(ctx context.Context, data *entities.User) error {
-	if err := repository.Db.Save(data).Error; err != nil {
+	err := repository.Db.Save(data).Error
+	if err != nil {
 		return err
 	}
 

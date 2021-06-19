@@ -15,20 +15,22 @@ type CreateUser struct {
 	Repository user.Repository
 }
 
-func (c *CreateUser) Create(ctx context.Context, data entities.User) (*entities.User, error) {
-	uuid, err := c.Uuid.Generate()
+func (usecase *CreateUser) Create(ctx context.Context, data entities.User) (*entities.User, error) {
+	uuid, err := usecase.Uuid.Generate()
 	if err != nil {
 		return nil, err
 	}
+
 	data.Id = uuid
 
-	hash, err := c.Hasher.Hash(data.Password)
+	hash, err := usecase.Hasher.Hash(data.Password)
 	if err != nil {
 		return nil, err
 	}
+
 	data.Password = hash
 
-	err = c.Validator.Validate(&data)
+	err = usecase.Validator.Validate(&data)
 	if err != nil {
 		return nil, err
 	}
@@ -36,14 +38,16 @@ func (c *CreateUser) Create(ctx context.Context, data entities.User) (*entities.
 	data.CreatedAt = time.Now().Local()
 	data.UpdatedAt = time.Now().Local()
 
-	existing, err := c.Repository.Exists(ctx, data.Email)
+	existing, err := usecase.Repository.Exists(ctx, data.Email)
 	if err != nil {
 		return nil, err
-	} else if existing {
+	}
+
+	if existing {
 		return nil, user.ErrExistingEmail
 	}
 
-	err = c.Repository.Create(ctx, &data)
+	err = usecase.Repository.Create(ctx, &data)
 	if err != nil {
 		return nil, err
 	}

@@ -9,8 +9,8 @@ type DeleteUser struct {
 	Repository user.Repository
 }
 
-func (f DeleteUser) Delete(ctx context.Context, id string) error {
-	err := f.Repository.Delete(ctx, id)
+func (usecase DeleteUser) Delete(ctx context.Context, id string) error {
+	err := usecase.Repository.Delete(ctx, id)
 	if err != nil {
 		return err
 	}

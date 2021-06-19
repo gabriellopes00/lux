@@ -22,6 +22,7 @@ func (orm *GormPG) Connect() (*gorm.DB, error) {
 		config.DB_SSL_MODE,
 		config.DB_TIME_ZONE,
 	)
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
