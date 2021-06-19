@@ -19,6 +19,9 @@ func (v UserGoValidator) Validate(data *entities.User) error {
 	} else if !govalidator.IsURL(data.AvatarUrl) {
 		return fmt.Errorf("invalid field %s", "avatar_url")
 
+	} else if !govalidator.IsIn(data.Gender, "F", "M") {
+		return fmt.Errorf("invalid field %s", "gender")
+
 	}
 
 	return nil

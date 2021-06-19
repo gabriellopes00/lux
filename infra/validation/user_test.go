@@ -51,6 +51,27 @@ func TestValdiate(t *testing.T) {
 		}
 	})
 
+	t.Run("Gender Validation", func(t *testing.T) {
+		helper := fakeUser
+		helper.Gender = "A"
+		err := validator.Validate(&helper)
+		if err == nil {
+			t.Errorf("gender validation failure")
+		}
+
+		helper.Gender = "AB"
+		err = validator.Validate(&helper)
+		if err == nil {
+			t.Errorf("gender validation failure")
+		}
+
+		helper.Gender = ""
+		err = validator.Validate(&helper)
+		if err == nil {
+			t.Errorf("gender validation failure")
+		}
+	})
+
 	t.Run("Email Validation", func(t *testing.T) {
 		helper := fakeUser
 		helper.Email = "invalidmail.com"
