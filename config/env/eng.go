@@ -1,4 +1,4 @@
-package config
+package env
 
 import (
 	"os"
@@ -20,11 +20,15 @@ var (
 )
 
 func LoadEnv() error {
-	if err := godotenv.Load(); err != nil {
+	err := godotenv.Load()
+	if err != nil {
 		return err
 	}
 
-	PORT, _ = strconv.Atoi(os.Getenv("PORT"))
+	PORT, err = strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		return err
+	}
 
 	DB_PORT, _ = strconv.Atoi(os.Getenv("DB_PORT"))
 	DB_USER = os.Getenv("DB_USER")

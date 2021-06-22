@@ -9,10 +9,10 @@ import (
 )
 
 type CreateUser struct {
-	Uuid      utils.UUIDGenerator
-	Hasher    utils.Hasher
-	Validator user.Validator
-	// Repository user.Repository
+	Uuid       utils.UUIDGenerator
+	Hasher     utils.Hasher
+	Validator  user.Validator
+	Repository user.Repository
 }
 
 func (usecase CreateUser) Create(ctx context.Context, data entities.User) (*entities.User, error) {
@@ -38,19 +38,19 @@ func (usecase CreateUser) Create(ctx context.Context, data entities.User) (*enti
 	data.CreatedAt = time.Now().Local()
 	data.UpdatedAt = time.Now().Local()
 
-	// existing, err := usecase.Repository.Exists(ctx, data.Email)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	existing, err := usecase.Repository.Exists(ctx, data.Email)
+	if err != nil {
+		return nil, err
+	}
 
-	// if existing {
-	// 	return nil, user.ErrExistingEmail
-	// }
+	if existing {
+		return nil, user.ErrExistingEmail
+	}
 
-	// err = usecase.Repository.Create(ctx, &data)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	err = usecase.Repository.Create(ctx, &data)
+	if err != nil {
+		return nil, err
+	}
 
 	return &data, nil
 }

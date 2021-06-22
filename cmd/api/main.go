@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"helpy/config"
+	"helpy/config/env"
 	router "helpy/pkg/server/routes"
 	"log"
 	"net/http"
@@ -10,7 +10,10 @@ import (
 )
 
 func main() {
-	config.LoadEnv()
+	err := env.LoadEnv()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 
 	r := router.GetRouter()
 	r.HandleFunc("/ping", func(rw http.ResponseWriter, r *http.Request) {
@@ -20,16 +23,16 @@ func main() {
 	server := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
-		Addr:         fmt.Sprintf("localhost:%d", config.PORT),
+		Addr:         fmt.Sprintf("localhost:%d", env.PORT),
 		Handler:      r,
 	}
 
 	fmt.Printf(
 		"%v :: Server running at http://localhost:%d\n",
 		time.Now().Local().Format(time.RFC3339),
-		config.PORT,
+		env.PORT,
 	)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err.Error())
 	}

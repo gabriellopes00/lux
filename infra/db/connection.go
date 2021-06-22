@@ -2,7 +2,7 @@ package db
 
 import (
 	"fmt"
-	"helpy/config"
+	"helpy/config/env"
 	"helpy/pkg/entities"
 
 	"gorm.io/driver/postgres"
@@ -14,13 +14,13 @@ type GormPG struct{}
 func (orm *GormPG) Connect() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
-		config.DB_HOST,
-		config.DB_USER,
-		config.DB_PASS,
-		config.DB_NAME,
-		config.DB_PORT,
-		config.DB_SSL_MODE,
-		config.DB_TIME_ZONE,
+		env.DB_HOST,
+		env.DB_USER,
+		env.DB_PASS,
+		env.DB_NAME,
+		env.DB_PORT,
+		env.DB_SSL_MODE,
+		env.DB_TIME_ZONE,
 	)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
