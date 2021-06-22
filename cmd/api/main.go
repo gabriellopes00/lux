@@ -1,84 +1,37 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"helpy/config"
-	"helpy/infra/db"
-	"helpy/infra/db/repositories"
-	"helpy/infra/utils"
-	valid "helpy/infra/validation"
-	"helpy/pkg/entities"
-	usecase "helpy/pkg/user/usecases"
+	router "helpy/pkg/server/routes"
 	"log"
+	"net/http"
 	"time"
 )
 
 func main() {
-	err := config.LoadEnv()
+	config.LoadEnv()
+
+	r := router.GetRouter()
+	r.HandleFunc("/ping", func(rw http.ResponseWriter, r *http.Request) {
+		rw.WriteHeader(http.StatusOK)
+	})
+
+	server := &http.Server{
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		Addr:         fmt.Sprintf("localhost:%d", config.PORT),
+		Handler:      r,
+	}
+
+	fmt.Printf(
+		"%v :: Server running at http://localhost:%d\n",
+		time.Now().Local().Format(time.RFC3339),
+		config.PORT,
+	)
+	err := server.ListenAndServe()
 	if err != nil {
-		log.Fatalf("error while loading environment variables: \n %s", err.Error())
+		log.Fatal(err.Error())
 	}
-
-	orm := db.GormPG{}
-	database, err := orm.Connect()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	userUsecase := usecase.CreateUser{
-		Uuid:       utils.UUIDGenerator{},
-		Hasher:     utils.Argon2Hasher{},
-		Repository: repositories.PgUserRepository{Db: database},
-		Validator:  valid.UserGoValidator{},
-	}
-
-	user := entities.User{
-		Name:        "Gabriel Lopes",
-		Email:       "gabriellopess@mail.com",
-		Password:    "helpyapp00",
-		IsAvailable: true,
-		AvatarUrl:   "https://avatar.png",
-		Gender:      "M",
-		BirthDate:   time.Date(2005, 4, 13, 0, 0, 0, 0, time.Local),
-	}
-	created, err := userUsecase.Create(context.Background(), user)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Println(created)
-
-	// findAvailableUsecase := usecase.FindAvailableUser{
-	// 	Repository: repositories.PgUserRepository{Db: database},
-	// }
-	// users, err := findAvailableUsecase.FindAvaliable(context.Background())
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-
-	// for _, v := range *users {
-	// 	fmt.Println(v)
-	// }
-
-	// asdf := usecase.DeleteUser{
-	// 	Repository: repositories.PgUserRepository{Db: database},
-	// }
-
-	// err = asdf.Delete(context.Background(), created.Id)
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-
-	time.Sleep(time.Second * 30)
-
-	asdf := usecase.UpdateUser{
-		Repository: repositories.PgUserRepository{Db: database},
-		Validator:  valid.UserGoValidator{},
-	}
-
-	created.Name = "asdf"
-	created.AvatarUrl = "http://asdf.jpg"
-
-	asdf.Update(context.Background(), *created)
 
 }
