@@ -13,6 +13,3 @@
 
 # Environment variables
 .env
-
-# Dependency directories
-# vendor/

@@ -4,6 +4,8 @@ import (
 	"os"
 	"strconv"
 
+	"log"
+
 	"github.com/joho/godotenv"
 )
 
@@ -19,24 +21,26 @@ var (
 	PORT = 0
 )
 
-func LoadEnv() error {
+func init() {
 	err := godotenv.Load()
 	if err != nil {
-		return err
+		log.Panicln(err)
 	}
 
 	PORT, err = strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
-		return err
+		log.Panicln(err)
 	}
 
-	DB_PORT, _ = strconv.Atoi(os.Getenv("DB_PORT"))
+	DB_PORT, err = strconv.Atoi(os.Getenv("DB_PORT"))
+	if err != nil {
+		log.Panicln(err)
+	}
+
 	DB_USER = os.Getenv("DB_USER")
 	DB_PASS = os.Getenv("DB_PASS")
 	DB_HOST = os.Getenv("DB_HOST")
 	DB_NAME = os.Getenv("DB_NAME")
 	DB_SSL_MODE = os.Getenv("DB_SSL_MODE")
 	DB_TIME_ZONE = os.Getenv("DB_TIME_ZONE")
-
-	return nil
 }

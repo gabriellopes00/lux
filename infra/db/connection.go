@@ -28,11 +28,6 @@ func (orm *GormPG) Connect() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = orm.AutoMigrate(db)
-	if err != nil {
-		return db, err
-	}
-
 	return db, nil
 }
 

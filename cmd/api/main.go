@@ -10,11 +10,6 @@ import (
 )
 
 func main() {
-	err := env.LoadEnv()
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-
 	r := router.GetRouter()
 	r.HandleFunc("/ping", func(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusOK)
@@ -32,7 +27,8 @@ func main() {
 		time.Now().Local().Format(time.RFC3339),
 		env.PORT,
 	)
-	err = server.ListenAndServe()
+
+	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
