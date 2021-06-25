@@ -1,7 +1,6 @@
 package validation_test
 
 import (
-	"fmt"
 	"helpy/infra/validation"
 	"helpy/pkg/entities"
 	"testing"
@@ -93,7 +92,6 @@ func TestValdiate(t *testing.T) {
 		}
 
 		helper.Email = "user@mail.com"
-		fmt.Println(&helper)
 		err = validator.Validate(&helper)
 		if err != nil {
 			t.Errorf("email validation failure 3")

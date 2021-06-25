@@ -1,10 +1,26 @@
 package router
 
 import (
-	build "helpy/pkg/server/build/controllers"
+	"helpy/infra/db/repositories"
+	"helpy/infra/utils"
+	"helpy/infra/validation"
+	"helpy/pkg/server/handlers"
+	usecase "helpy/pkg/user/usecases"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-var UserRoutes = []Route{
-	{Path: "/user", Method: http.MethodPost, Handler: build.CreateUserHandler.Handle},
+var CreateUserHandler = handlers.CreateUserHandler{
+	Usecase: usecase.CreateUser{
+		Uuid:       utils.UUIDGenerator{},
+		Hasher:     utils.Argon2Hasher{},
+		Validator:  validation.UserGoValidator{},
+		Repository: repositories.PgUserRepository{},
+	},
+}
+
+func SetupUserRoutes(r *mux.Router) {
+	r.HandleFunc("/user", CreateUserHandler.Handle).Methods(http.MethodPost)
+
 }

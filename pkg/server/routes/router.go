@@ -6,24 +6,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type Route struct {
-	Method  string
-	Path    string
-	Handler http.HandlerFunc
-}
+func Router() *mux.Router {
+	r := mux.NewRouter()
 
-func SetupRouter(r *mux.Router) *mux.Router {
-	var routes = [][]Route{UserRoutes}
-	for _, router := range routes {
-		for _, route := range router {
-			r.HandleFunc(route.Path, route.Handler).Methods(route.Method)
-		}
-	}
+	r.Use(mux.CORSMethodMiddleware(r))
+	r.HandleFunc("/ping", func(rw http.ResponseWriter, r *http.Request) {
+		rw.WriteHeader(http.StatusOK)
+	})
+
+	SetupUserRoutes(r)
 
 	return r
-}
-
-func GetRouter() *mux.Router {
-	r := mux.NewRouter()
-	return SetupRouter(r)
 }
