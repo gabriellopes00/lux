@@ -4,26 +4,13 @@ import (
 	"fmt"
 	"helpy/config/env"
 	"helpy/infra/db"
-	"helpy/infra/db/repositories"
-	"helpy/infra/utils"
-	"helpy/infra/validation"
-	"helpy/pkg/server/handlers"
-	usecase "helpy/pkg/user/usecases"
+	builds "helpy/pkg/api/builds"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 )
-
-func init() {
-	err := godotenv.Load()
-
-	if err != nil {
-		log.Fatalln("Error loading .env file")
-	}
-}
 
 func main() {
 	db := db.GormPG{}
@@ -44,17 +31,7 @@ func main() {
 		rw.WriteHeader(http.StatusOK)
 	})
 
-	var CreateUserHandler = handlers.CreateUserHandler{
-		Usecase: usecase.CreateUser{
-			Uuid:      utils.UUIDGenerator{},
-			Hasher:    utils.Argon2Hasher{},
-			Validator: validation.UserGoValidator{},
-			Repository: repositories.PgUserRepository{
-				Db: conn,
-			},
-		},
-	}
-
+	CreateUserHandler := builds.NewCreateUserHandler(conn)
 	r.HandleFunc("/user", CreateUserHandler.Handle).Methods(http.MethodPost)
 
 	server := &http.Server{
@@ -72,7 +49,7 @@ func main() {
 
 	err = server.ListenAndServe()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatalln(err.Error())
 	}
 
 }

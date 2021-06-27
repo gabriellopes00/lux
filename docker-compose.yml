@@ -29,9 +29,20 @@ services:
     ports:
       - '$PORT:$PORT'
 
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.10.2'
+    environment:
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ports:
+      - '9200:9200'
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
 networks:
   helpy:
     driver: bridge
 
 volumes:
   dbdata:
+  esdata:

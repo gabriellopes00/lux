@@ -19,13 +19,13 @@ func (h *CreateUserHandler) Handle(rw http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		rw.WriteHeader(http.StatusBadRequest)
+		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		rw.WriteHeader(http.StatusInternalServerError)
+		rw.WriteHeader(http.StatusBadRequest)
 		rw.Write([]byte(err.Error()))
 		return
 	}
