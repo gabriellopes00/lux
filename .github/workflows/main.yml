@@ -12,7 +12,7 @@ jobs:
         go-version: [1.16.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
-    
+
     steps:
       - name: Install Go
         uses: actions/setup-go@v2
@@ -29,3 +29,17 @@ jobs:
       
       - name: Run tests
         run: go test ./...
+         
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Heroku deploy
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_email: 'gabrielluislopes00@gmail.com'
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.APP_NAME}}
+          branch: 'main'

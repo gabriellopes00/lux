@@ -1,4 +1,5 @@
 # Helpy
+[![Main Workflow](https://github.com/gabriellopes00/helpy/actions/workflows/main.yml/badge.svg)](https://github.com/gabriellopes00/helpy/actions/workflows/main.yml)
 
 ## License ✒
 
