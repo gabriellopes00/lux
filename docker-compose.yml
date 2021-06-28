@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   postgresql:
-    container_name: helpy-db
+    container_name: helpy_db
     image: postgres:13-alpine
     restart: always
     volumes:
@@ -17,7 +17,7 @@ services:
       - helpy
 
   api:
-    container_name: helpy-api
+    container_name: helpy_api
     depends_on:
       - postgresql
     build:
@@ -27,17 +27,7 @@ services:
     networks:
       - helpy
     ports:
-      - '$PORT:$PORT'
-
-  elasticsearch:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.10.2'
-    environment:
-      - discovery.type=single-node
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-    ports:
-      - '9200:9200'
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
+      - '5590:5590'
 
 networks:
   helpy:
@@ -45,4 +35,3 @@ networks:
 
 volumes:
   dbdata:
-  esdata:

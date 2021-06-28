@@ -37,12 +37,12 @@ func main() {
 	server := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
-		Addr:         fmt.Sprintf("localhost:%d", env.PORT),
+		Addr:         fmt.Sprintf(":%d", env.PORT),
 		Handler:      r,
 	}
 
 	fmt.Printf(
-		"%v :: Server running at http://localhost:%d\n",
+		"%v :: Server running on port :%d\n",
 		time.Now().Local().Format(time.RFC3339),
 		env.PORT,
 	)
