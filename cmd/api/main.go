@@ -34,6 +34,8 @@ func main() {
 
 	CreateUserHandler := builds.NewCreateUserHandler(conn)
 	r.HandleFunc("/user", CreateUserHandler.Handle).Methods(http.MethodPost)
+	DeleteUserHandler := builds.NewDeleteUserHandler(conn)
+	r.HandleFunc("/user/{userId}", DeleteUserHandler.Handle).Methods(http.MethodDelete)
 
 	server := &http.Server{
 		ReadTimeout:  5 * time.Second,

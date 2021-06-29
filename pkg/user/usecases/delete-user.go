@@ -10,10 +10,5 @@ type DeleteUser struct {
 }
 
 func (usecase DeleteUser) Delete(ctx context.Context, id string) error {
-	err := usecase.Repository.Delete(ctx, id)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return usecase.Repository.Delete(ctx, id)
 }

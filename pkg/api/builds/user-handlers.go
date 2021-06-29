@@ -20,3 +20,11 @@ func NewCreateUserHandler(conn *gorm.DB) *h.CreateUserHandler {
 		},
 	}
 }
+
+func NewDeleteUserHandler(conn *gorm.DB) *h.DeleteUserHandler {
+	return &h.DeleteUserHandler{
+		Usecase: usecase.DeleteUser{
+			Repository: repositories.PgUserRepository{Db: conn},
+		},
+	}
+}

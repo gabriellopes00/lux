@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"helpy/pkg/entities"
+	"time"
 
 	_ "github.com/lib/pq"
 	"gorm.io/gorm"
@@ -48,18 +49,30 @@ func (repository PgUserRepository) FindAvailable(ctx context.Context) (*[]entiti
 }
 
 func (repository PgUserRepository) FindByEmail(ctx context.Context, email string) (*entities.User, error) {
-	users := &entities.User{}
+	user := entities.User{}
 
-	result := repository.Db.Find(users, "email = ?", email)
+	result := repository.Db.Find(&user, "email = ?", email)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	return users, nil
+	return &user, nil
 }
 
 func (repository PgUserRepository) Delete(ctx context.Context, id string) error {
-	err := repository.Db.Delete(&entities.User{Id: id}).Error
+	var user = entities.User{}
+
+	err := repository.Db.Find(&user, "id = ?", id).Error
+	if err != nil {
+		return err
+	}
+
+	if user.Id != id {
+		return nil
+	}
+
+	user.DeletedAt = time.Now().Local()
+	err = repository.Db.Save(user).Error
 	if err != nil {
 		return err
 	}

@@ -13,4 +13,5 @@ type User struct {
 	BirthDate   time.Time `json:"birth_date,omitempty" gorm:"not null"`
 	CreatedAt   time.Time `json:"created_at,omitempty" gorm:"not null"`
 	UpdatedAt   time.Time `json:"updated_at,omitempty" gorm:"not null"`
+	DeletedAt   time.Time `json:"deleted_at,omitempty" gorm:"index"`
 }
