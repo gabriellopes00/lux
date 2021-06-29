@@ -18,7 +18,7 @@ func (usecase *UpdateUser) Update(ctx context.Context, data entities.User) (*ent
 		return nil, err
 	}
 
-	if existing.Id == "" {
+	if existing == nil {
 		return nil, user.ErrNonExistentEmail
 	}
 
