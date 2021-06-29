@@ -10,12 +10,12 @@ import (
 )
 
 type CreateUserHandler struct {
-	Usecase user.CreateUser
+	Validator user.Validator
+	Usecase   user.CreateUser
 }
 
 func (h *CreateUserHandler) Handle(rw http.ResponseWriter, r *http.Request) {
 	var user entities.User
-	var ctx = context.Background()
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -25,12 +25,19 @@ func (h *CreateUserHandler) Handle(rw http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &user)
 	if err != nil {
+		rw.WriteHeader(http.StatusUnprocessableEntity)
+		rw.Write([]byte(err.Error()))
+		return
+	}
+
+	err = h.Validator.Validate(&user)
+	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		rw.Write([]byte(err.Error()))
 		return
 	}
 
-	created, err := h.Usecase.Create(ctx, user)
+	created, err := h.Usecase.Create(context.Background(), user)
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.Write([]byte(err.Error()))

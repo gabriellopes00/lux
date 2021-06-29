@@ -11,7 +11,6 @@ import (
 type CreateUser struct {
 	Uuid       utils.UUIDGenerator
 	Hasher     utils.Hasher
-	Validator  user.Validator
 	Repository user.Repository
 }
 
@@ -29,11 +28,6 @@ func (usecase CreateUser) Create(ctx context.Context, data entities.User) (*enti
 	}
 
 	data.Password = hash
-
-	err = usecase.Validator.Validate(&data)
-	if err != nil {
-		return nil, err
-	}
 
 	data.CreatedAt = time.Now().Local()
 	data.UpdatedAt = time.Now().Local()

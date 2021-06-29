@@ -1,4 +1,4 @@
-package validation_test
+package tests
 
 import (
 	"helpy/infra/validation"
@@ -19,21 +19,6 @@ func TestValdiate(t *testing.T) {
 		Gender:      "F",
 		BirthDate:   time.Date(2005, 4, 13, 0, 0, 0, 0, time.Local),
 	}
-
-	t.Run("UUID Validation", func(t *testing.T) {
-		helper := fakeUser
-		helper.Id = "invalid_uuid"
-		err := validator.Validate(&helper)
-		if err == nil {
-			t.Errorf("UUID validation failure")
-		}
-
-		helper.Id = ""
-		err = validator.Validate(&helper)
-		if err == nil {
-			t.Errorf("UUID validation failure")
-		}
-	})
 
 	t.Run("Avatar Url Validation", func(t *testing.T) {
 		helper := fakeUser

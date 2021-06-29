@@ -12,13 +12,11 @@ import (
 
 func NewCreateUserHandler(conn *gorm.DB) *h.CreateUserHandler {
 	return &h.CreateUserHandler{
+		Validator: validation.UserGoValidator{},
 		Usecase: usecase.CreateUser{
-			Uuid:      utils.UUIDGenerator{},
-			Hasher:    utils.Argon2Hasher{},
-			Validator: validation.UserGoValidator{},
-			Repository: repositories.PgUserRepository{
-				Db: conn,
-			},
+			Uuid:       utils.UUIDGenerator{},
+			Hasher:     utils.Argon2Hasher{},
+			Repository: repositories.PgUserRepository{Db: conn},
 		},
 	}
 }

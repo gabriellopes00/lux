@@ -15,6 +15,7 @@ import (
 func main() {
 	db := db.GormPG{}
 
+	fmt.Printf("%v :: Postgres connected successfully\n", time.Now().Local().Format(time.RFC3339))
 	conn, err := db.Connect()
 	if err != nil {
 		log.Panicln(err)
@@ -37,7 +38,7 @@ func main() {
 	server := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
-		Addr:         fmt.Sprintf(":%d", env.PORT),
+		Addr:         fmt.Sprintf("localhost:%d", env.PORT),
 		Handler:      r,
 	}
 
