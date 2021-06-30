@@ -13,3 +13,4 @@
 
 # Environment variables
 .env
+*.pem
