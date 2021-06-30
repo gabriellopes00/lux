@@ -3,18 +3,27 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"helpy/pkg/api/validators"
 	"helpy/pkg/entities"
-	"helpy/pkg/user"
+	"helpy/pkg/services/auth"
+	u "helpy/pkg/user"
 	"io"
 	"net/http"
 )
 
 type CreateUserHandler struct {
-	Validator user.Validator
-	Usecase   user.CreateUser
+	Validator validators.UserValidator
+	Usecase   u.CreateUser
+	Auth      auth.UserAuth
+
+	response struct {
+		AccessToken string        `json:"access_token"`
+		User        entities.User `json:"user"`
+	}
 }
 
-func (h *CreateUserHandler) Handle(rw http.ResponseWriter, r *http.Request) {
+func (handler *CreateUserHandler) Handle(rw http.ResponseWriter, r *http.Request) {
 	var user entities.User
 
 	body, err := io.ReadAll(r.Body)
@@ -25,29 +34,42 @@ func (h *CreateUserHandler) Handle(rw http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		rw.WriteHeader(http.StatusUnprocessableEntity)
+		rw.WriteHeader(http.StatusBadRequest)
 		rw.Write([]byte(err.Error()))
 		return
 	}
 
-	err = h.Validator.Validate(&user)
+	err = handler.Validator.Validate(&user)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		rw.Write([]byte(err.Error()))
 		return
 	}
 
-	created, err := h.Usecase.Create(context.Background(), user)
+	created, err := handler.Usecase.Create(context.Background(), user)
+	if errors.Is(err, u.ErrExistingEmail) {
+		rw.WriteHeader(http.StatusBadRequest)
+		rw.Write([]byte(err.Error()))
+		return
+
+	} else if err != nil {
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	token, err := handler.Auth.GenAuthToken(created.Id)
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
-		rw.Write([]byte(err.Error()))
 		return
 	}
 
 	rw.Header().Set("Content-Type", "application/json")
 	rw.WriteHeader(http.StatusCreated)
 
-	err = json.NewEncoder(rw).Encode(created)
+	handler.response.AccessToken = token
+	handler.response.User = *created
+
+	err = json.NewEncoder(rw).Encode(handler.response)
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
 		return

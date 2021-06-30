@@ -1,4 +1,4 @@
-package usecase
+package usecases
 
 import (
 	"context"
@@ -9,20 +9,20 @@ import (
 )
 
 type CreateUser struct {
-	Uuid       utils.UUIDGenerator
-	Hasher     utils.Hasher
-	Repository user.Repository
+	UuidGenerator utils.UUIDGenerator
+	Hasher        utils.Hasher
+	Repository    user.Repository
 }
 
 func (usecase CreateUser) Create(ctx context.Context, data entities.User) (*entities.User, error) {
-	uuid, err := usecase.Uuid.Generate()
+	uuid, err := usecase.UuidGenerator.Generate()
 	if err != nil {
 		return nil, err
 	}
 
 	data.Id = uuid
 
-	hash, err := usecase.Hasher.Hash(data.Password)
+	hash, err := usecase.Hasher.GenHash(data.Password)
 	if err != nil {
 		return nil, err
 	}

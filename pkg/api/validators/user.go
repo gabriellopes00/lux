@@ -1,7 +1,7 @@
-package user
+package validators
 
 import "helpy/pkg/entities"
 
-type Validator interface {
+type UserValidator interface {
 	Validate(user *entities.User) error
 }

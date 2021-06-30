@@ -32,7 +32,7 @@ var defaultParams = &params{
 
 type Argon2Hasher struct{}
 
-func (a Argon2Hasher) Hash(payload string) (hash string, err error) {
+func (a Argon2Hasher) GenHash(payload string) (hash string, err error) {
 	salt, err := generateRandomBytes(defaultParams.SaltLength)
 	if err != nil {
 		return "", err
