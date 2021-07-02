@@ -1,4 +1,12 @@
 tests/
+
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+Procfile
+
 .git*
+
 README.md
-LECENSE.md
+LICENSE.md
