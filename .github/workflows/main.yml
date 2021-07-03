@@ -26,10 +26,13 @@ jobs:
 
       - name: Check commit message
         uses: wagoid/commitlint-github-action@v3
-      
+
       - name: Run tests
-        run: go test ./...
-         
+        run: make test
+
+      - name: Build app
+        run: make build
+
   deploy:
     needs: build
     runs-on: ubuntu-latest

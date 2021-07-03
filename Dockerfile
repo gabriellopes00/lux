@@ -1,7 +1,7 @@
 FROM golang:1.16.5-alpine3.14 AS builder
 WORKDIR /go/src/helpy
 COPY . .
-RUN apk add make
+RUN apk update && apk upgrade && apk add make
 RUN make install && make build
 
 FROM alpine:3.14

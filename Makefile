@@ -10,6 +10,12 @@ postgresup:
 postgresdown:
 	@docker rm -f helpy_db
 
+composeup:
+	@docker-compose up --build -d
+
+composedown:
+	@docker-compose down
+
 test:
 	@go test -v -cover ./...
 
@@ -22,4 +28,4 @@ server:
 build:
 	@GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ./bin/app cmd/api/main.go
 
-.PHONY: postgresup postgresdow test install server build
+.PHONY: postgresup postgresdow test install server build composeup composedown
