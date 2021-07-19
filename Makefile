@@ -1,4 +1,4 @@
-postgresup:
+pgup:
 	@docker run -d \
 	--name helpy_db \
 	-e POSTGRES_PASSWORD=psql \
@@ -7,7 +7,7 @@ postgresup:
 	-p 5432:5432 \
   postgres
 
-postgresdown:
+pgdown:
 	@docker rm -f helpy_db
 
 composeup:
@@ -28,4 +28,4 @@ server:
 build:
 	@GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ./bin/app cmd/api/main.go
 
-.PHONY: postgresup postgresdow test install server build composeup composedown
+.PHONY: pgdown pgup test install server build composeup composedown

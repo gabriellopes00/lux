@@ -14,3 +14,6 @@
 # Environment variables
 .env
 *.pem
+
+# Jetbrains IDEs
+.idea

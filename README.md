@@ -1,9 +1,9 @@
-# Helpy
-[![Main Workflow](https://github.com/gabriellopes00/helpy/actions/workflows/main.yml/badge.svg)](https://github.com/gabriellopes00/helpy/actions/workflows/main.yml)
+# Lux
+[![Main Workflow](https://github.com/gabriellopes00/lux/actions/workflows/main.yml/badge.svg)](https://github.com/gabriellopes00/lux/actions/workflows/main.yml)
 
 ## License ✒
 
-This project uses [GPL-3.0](https://github.com/gabriellopes00/feedbackio-api/blob/main/LICENSE.md) license, which allows anyone modify, distribute and use the application code in many different ways. However there are many conditions, such as **License and copyright notice**, **State changes**, **Disclose source** and **Use the same license**. [Read complete license](https://github.com/gabriellopes00/feedbackio-api/blob/main/LICENSE.md) to know more about permissions and copyright.
+This project uses [GPL-3.0](https://github.com/gabriellopes00/lux/blob/main/LICENSE.md) license, which allows anyone modify, distribute and use the application code in many different ways. However there are many conditions, such as **License and copyright notice**, **State changes**, **Disclose source** and **Use the same license**. [Read complete license](https://github.com/gabriellopes00/feedbackio-api/blob/main/LICENSE.md) to know more about permissions and copyright.
 
 ## Contact 📱
 
