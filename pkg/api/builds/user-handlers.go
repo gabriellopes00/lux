@@ -1,12 +1,12 @@
 package builds
 
 import (
-	"helpy/infra/db/repositories"
-	"helpy/infra/utils"
-	"helpy/infra/validation"
-	"helpy/pkg/api/handlers"
-	"helpy/pkg/services/auth"
-	"helpy/pkg/user/usecases"
+	"lux/infra/db/repositories"
+	"lux/infra/utils"
+	"lux/infra/validation"
+	"lux/pkg/api/handlers"
+	"lux/pkg/services/auth"
+	"lux/pkg/user/usecases"
 
 	"gorm.io/gorm"
 )
@@ -21,14 +21,6 @@ func NewCreateUserHandler(conn *gorm.DB) *handlers.CreateUserHandler {
 			UuidGenerator: utils.UUIDGenerator{},
 			Hasher:        utils.Argon2Hasher{},
 			Repository:    repositories.PgUserRepository{Db: conn},
-		},
-	}
-}
-
-func NewDeleteUserHandler(conn *gorm.DB) *handlers.DeleteUserHandler {
-	return &handlers.DeleteUserHandler{
-		Usecase: usecases.DeleteUser{
-			Repository: repositories.PgUserRepository{Db: conn},
 		},
 	}
 }

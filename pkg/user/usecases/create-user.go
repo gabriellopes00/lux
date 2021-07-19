@@ -2,9 +2,9 @@ package usecases
 
 import (
 	"context"
-	"helpy/pkg/entities"
-	"helpy/pkg/user"
-	"helpy/pkg/utils"
+	"lux/pkg/entities"
+	"lux/pkg/user"
+	"lux/pkg/utils"
 	"time"
 )
 
@@ -15,6 +15,15 @@ type CreateUser struct {
 }
 
 func (usecase CreateUser) Create(ctx context.Context, data entities.User) (*entities.User, error) {
+	existing, err := usecase.Repository.Exists(ctx, data.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if existing {
+		return nil, user.ErrExistingEmail
+	}
+
 	uuid, err := usecase.UuidGenerator.Generate()
 	if err != nil {
 		return nil, err
@@ -31,15 +40,6 @@ func (usecase CreateUser) Create(ctx context.Context, data entities.User) (*enti
 
 	data.CreatedAt = time.Now().Local()
 	data.UpdatedAt = time.Now().Local()
-
-	existing, err := usecase.Repository.Exists(ctx, data.Email)
-	if err != nil {
-		return nil, err
-	}
-
-	if existing {
-		return nil, user.ErrExistingEmail
-	}
 
 	err = usecase.Repository.Create(ctx, &data)
 	if err != nil {

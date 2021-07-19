@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"helpy/pkg/api/validators"
-	"helpy/pkg/entities"
-	"helpy/pkg/services/auth"
-	u "helpy/pkg/user"
 	"io"
+	"lux/pkg/api/validators"
+	"lux/pkg/entities"
+	"lux/pkg/services/auth"
+	u "lux/pkg/user"
 	"net/http"
 )
 

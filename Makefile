@@ -1,14 +1,14 @@
 pgup:
 	@docker run -d \
-	--name helpy_db \
+	--name lux_db \
 	-e POSTGRES_PASSWORD=psql \
-	-e POSTGRES_DB=helpy \
-	-v helpydb:/var/lib/postgresql/data/ \
+	-e POSTGRES_DB=lux \
+	-v luxdb:/var/lib/postgresql/data/ \
 	-p 5432:5432 \
   postgres
 
 pgdown:
-	@docker rm -f helpy_db
+	@docker rm -f lux_db
 
 composeup:
 	@docker-compose up --build -d

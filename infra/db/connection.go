@@ -2,8 +2,8 @@ package db
 
 import (
 	"fmt"
-	"helpy/config/env"
-	"helpy/pkg/entities"
+	"lux/config/env"
+	"lux/pkg/entities"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

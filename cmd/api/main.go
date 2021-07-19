@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"helpy/config/env"
-	"helpy/infra/db"
-	"helpy/pkg/api/builds"
 	"log"
+	"lux/config/env"
+	"lux/infra/db"
+	"lux/pkg/api/builds"
 	"net/http"
 	"time"
 
@@ -13,10 +13,6 @@ import (
 )
 
 func main() {
-
-	// asdf := auth.UserAuth{}
-	// asdf.GenerateAuthToken("6b02ecfd-8bc9-480f-89db-fa82de4a835a")
-
 	db := db.GormPG{}
 
 	fmt.Printf("%v :: Postgres connected successfully\n", time.Now().Local().Format(time.RFC3339))
@@ -38,8 +34,6 @@ func main() {
 
 	CreateUserHandler := builds.NewCreateUserHandler(conn)
 	r.HandleFunc("/user", CreateUserHandler.Handle).Methods(http.MethodPost)
-	// DeleteUserHandler := builds.NewDeleteUserHandler(conn)
-	// r.HandleFunc("/user/{userId}", DeleteUserHandler.Handle).Methods(http.MethodDelete)
 
 	server := &http.Server{
 		ReadTimeout:  5 * time.Second,

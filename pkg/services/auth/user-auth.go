@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"helpy/config/env"
-	"helpy/pkg/utils"
+	"lux/config/env"
+	"lux/pkg/utils"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -25,7 +25,7 @@ func (a *UserAuth) GenAuthToken(payload interface{}) (string, error) {
 	}
 
 	claims["authorized"] = true
-	claims["payload"] = payload
+	claims["userId"] = payload
 	claims["id"] = id
 	claims["exp"] = time.Now().Add(time.Minute * time.Duration(env.TOKEN_EXPIRATION_TIME)).Local()
 

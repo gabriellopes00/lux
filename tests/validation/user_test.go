@@ -1,8 +1,8 @@
 package tests
 
 import (
-	"helpy/infra/validation"
-	"helpy/pkg/entities"
+	"lux/infra/validation"
+	"lux/pkg/entities"
 	"testing"
 	"time"
 )
@@ -10,14 +10,13 @@ import (
 func TestValdiate(t *testing.T) {
 	validator := validation.UserGoValidator{}
 	fakeUser := entities.User{
-		Id:          "5aa30a03-3078-4418-adf6-64305b62be89",
-		Name:        "User Name",
-		Email:       "user@mail.com",
-		Password:    "user_pass00",
-		IsAvailable: true,
-		AvatarUrl:   "https://user_avatar.png",
-		Gender:      "F",
-		BirthDate:   time.Date(2005, 4, 13, 0, 0, 0, 0, time.Local),
+		Id:        "5aa30a03-3078-4418-adf6-64305b62be89",
+		Name:      "User Name",
+		Email:     "user@mail.com",
+		Password:  "user_pass00",
+		Bio:       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta natus voluptatem non delectus magnam aliquam aliquid, hic vitae architecto autem corporis perspiciatis eum qui placeat accusantium repellat deleniti et ipsam?",
+		AvatarUrl: "https://user_avatar.png",
+		BirthDate: time.Date(2005, 4, 13, 0, 0, 0, 0, time.Local),
 	}
 
 	t.Run("Avatar Url Validation", func(t *testing.T) {
@@ -32,27 +31,6 @@ func TestValdiate(t *testing.T) {
 		err = validator.Validate(&helper)
 		if err == nil {
 			t.Errorf("avatar url validation failure")
-		}
-	})
-
-	t.Run("Gender Validation", func(t *testing.T) {
-		helper := fakeUser
-		helper.Gender = "A"
-		err := validator.Validate(&helper)
-		if err == nil {
-			t.Errorf("gender validation failure")
-		}
-
-		helper.Gender = "AB"
-		err = validator.Validate(&helper)
-		if err == nil {
-			t.Errorf("gender validation failure")
-		}
-
-		helper.Gender = ""
-		err = validator.Validate(&helper)
-		if err == nil {
-			t.Errorf("gender validation failure")
 		}
 	})
 

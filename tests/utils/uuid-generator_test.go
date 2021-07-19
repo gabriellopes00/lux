@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"helpy/infra/utils"
+	"lux/infra/utils"
 	"testing"
 
 	"github.com/asaskevich/govalidator"
