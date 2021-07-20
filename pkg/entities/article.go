@@ -7,7 +7,6 @@ type Article struct {
 	Title     string    `json:"title,omitempty" gorm:"not null; type:text"`
 	Content   string    `json:"content,omitempty" gorm:"not null; type:text"`
 	UserId    string    `json:"-" gorm:"not null; type:varchar"`
-	//Tags       []Tag    `json:"tags,omitempty" gorm:"type:text"`
 	CreatedAt time.Time `json:"created_at,omitempty" gorm:"not null"`
 	UpdatedAt time.Time `json:"updated_at,omitempty" gorm:"not null"`
 }
